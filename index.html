@@ -83,8 +83,9 @@ nav.main a:hover::after{width:100%}
 .hactions{flex:0 0 auto}
 @media(min-width:900px){nav.main{display:flex}}
 /* hero */
-.hero{position:relative;min-height:min(88svh,760px);display:grid;align-items:end;overflow:hidden}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero{position:relative;min-height:min(88svh,760px);display:grid;align-items:end;overflow:hidden;background:var(--green-deep)}
+.hero img{display:none}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .hero .veil{position:absolute;inset:0;background:linear-gradient(180deg,oklch(.28 .07 152/.55),oklch(.28 .07 152/.2) 35%,oklch(.28 .07 152/.9))}
 .hero .inner{position:relative;padding-block:clamp(88px,14vw,150px) clamp(40px,7vw,80px);color:#fff}
 .hero h1{font-size:var(--step-4);line-height:1.02;max-width:16ch;color:#fff}
@@ -1210,6 +1211,39 @@ async function boot(){
   if(window.__introDone) window.__introDone();
 }
 boot();
+
+/* ===== خلفية الفيديو في واجهة الصفحة ===== */
+(function(){
+  var hero=document.querySelector(".hero");
+  if(!hero) return;
+  var video=document.createElement("video");
+  video.className="hero-video";
+  video.autoplay=true;
+  video.muted=true;
+  video.defaultMuted=true;
+  video.loop=true;
+  video.playsInline=true;
+  video.preload="auto";
+  video.setAttribute("aria-hidden","true");
+  video.setAttribute("tabindex","-1");
+  var source=document.createElement("source");
+  source.src="https://cdn.pixabay.com/video/2022/06/23/121876-724720092_medium.mp4";
+  source.type="video/mp4";
+  video.appendChild(source);
+  hero.insertBefore(video,hero.firstChild);
+  var playVideo=function(){
+    video.muted=true;
+    var promise=video.play();
+    if(promise&&promise.catch) promise.catch(function(){});
+  };
+  video.addEventListener("loadeddata",playVideo);
+  video.addEventListener("canplay",playVideo);
+  video.addEventListener("pause",playVideo);
+  document.addEventListener("visibilitychange",function(){
+    if(!document.hidden) playVideo();
+  });
+  playVideo();
+})();
 
 
 </script>
