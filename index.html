@@ -489,6 +489,41 @@ input.search{margin-bottom:6px}
 body.introing{overflow:hidden}
 @media (prefers-reduced-motion:reduce){#intro *{animation:none!important}}
 
+/* ===== زر "أضف إلى السلة" الجديد + شارة الكمية فوق صورة المنتج ===== */
+.add-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3rem;flex:0 0 auto;border:0;cursor:pointer;
+  background:var(--green);color:var(--sand);font:600 .72rem/1 "Cairo",sans-serif;letter-spacing:-.005em;
+  padding:.42rem .75rem;border-radius:999px;box-shadow:0 4px 10px -7px oklch(.28 .07 152/.9);white-space:nowrap;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),filter .2s var(--ease);min-height:30px}
+.add-btn svg{width:12px;height:12px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.add-btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+.add-btn:active{transform:translateY(0) scale(.96);filter:brightness(.95)}
+.add-btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.add-btn.gold{background:var(--gradient-gold);color:oklch(.26 .06 152)}
+.prow{flex-wrap:wrap}
+.qty-badge{position:absolute;inset-block-start:6px;inset-inline-end:6px;z-index:5;display:none;align-items:center;justify-content:center;
+  min-width:22px;height:19px;padding:0 5px;border-radius:999px;background:var(--gradient-gold);color:oklch(.26 .06 152);
+  font:700 .62rem/1 "Cairo",sans-serif;box-shadow:0 4px 10px -5px oklch(.28 .07 152/.7),0 0 0 2px oklch(1 0 0/.85)}
+.qty-badge.show{display:flex}
+.qty-badge.pop{animation:qtyBadgePop .45s var(--ease)}
+@keyframes qtyBadgePop{0%{transform:scale(.5)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.qty-badge.pop{animation:none}}
+
+/* ===== قياسات مخصصة لأجهزة الموبايل: تعتمد على عرض البطاقة الفعلي (container queries)
+   الزر يبقى كاملاً بنصّه "أضف إلى السلة" دائمًا، وعلى البطاقات الضيقة يتمدّد ليأخذ عرض الصف كاملاً
+   بدلاً من أن يتحول إلى أيقونة صغيرة داخل دائرة ===== */
+@container (max-width:340px){
+  .prow{gap:6px}
+  .add-btn{flex:1 1 100%;width:100%;padding:.55rem .8rem;font-size:.76rem;min-height:36px;gap:.35rem}
+  .add-btn svg{width:14px;height:14px}
+  .qty-badge{min-width:24px;height:20px;font-size:.62rem}
+}
+/* شبكة ثابتة العرض (متصفحات لا تدعم container queries) */
+@media (max-width:760px){
+  .prow{gap:6px}
+  .add-btn{flex:1 1 100%;width:100%;padding:.55rem .8rem;font-size:.76rem;min-height:36px;gap:.35rem}
+  .add-btn svg{width:14px;height:14px}
+  .qty-badge{min-width:24px;height:20px;font-size:.62rem}
+}
 </style>
 </head>
 <body>
@@ -848,13 +883,14 @@ function setCat(k){cat=k;renderFilters();render();}
 function render(){
   const q=($("#q").value||"").trim().toLowerCase();
   const list=PRODUCTS.filter(p=>(cat==="all"||p.cat===cat)&&(!q||p.name.toLowerCase().includes(q)||p.en.toLowerCase().includes(q)));
-  $("#products").innerHTML = list.length ? list.map(p=>`
+  $("#products").innerHTML = list.length ? list.map(p=>{const q=cartQty(p.id);return `
     <article class="card">
       <div class="scene reveal">
         <div class="tilt">
           <img class="pimg" loading="lazy" width="600" height="450" src="${p.img||IMG[p.id]||''}" alt="${p.name}">
           <span class="gloss"></span>
         </div>
+        <span class="qty-badge${q>0?' show':''}" id="qtybadge-${p.id}">×${q}</span>
       </div>
       <div class="body">
         <span class="tag">${p.en}</span>
@@ -862,31 +898,38 @@ function render(){
         <p class="desc">${p.desc}</p>
         <div class="prow">
           <span class="price">${p.price.toFixed(2)}<small>${CURRENCY}</small></span>
-          <button class="add" aria-label="أضف ${p.name} إلى السلة" title="أضف إلى السلة" onclick="addToCart('${p.id}',this)">+</button>
+          <button class="add-btn" aria-label="أضف ${p.name} إلى السلة" title="أضف إلى السلة" onclick="addToCart('${p.id}',this)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+            <span class="lbl">أضف إلى السلة</span>
+          </button>
         </div>
       </div>
-    </article>`).join("") : `<p class="empty">لا توجد نتائج مطابقة.</p>`;
+    </article>`;}).join("") : `<p class="empty">لا توجد نتائج مطابقة.</p>`;
   init3D();
 }
 
 function renderGifts(){
-  $("#gifts-grid").innerHTML = GIFTS.map(g=>`
+  $("#gifts-grid").innerHTML = GIFTS.map(g=>{const q=cartQty(g.id);return `
     <article class="card">
       <div class="scene reveal">
         <div class="tilt">
           <img class="pimg" loading="lazy" width="600" height="450" src="${g.img||IMG[g.id]||''}" alt="${g.name}">
           <span class="gloss"></span>
         </div>
+        <span class="qty-badge${q>0?' show':''}" id="qtybadge-${g.id}">×${q}</span>
       </div>
       <div class="body">
         <span class="tag">Gift Box</span>
         <h3>${g.name}</h3><p class="desc">${g.desc}</p>
         <div class="prow">
           <span class="price">${g.price.toFixed(2)}<small>${CURRENCY}</small></span>
-          <button class="add gold" aria-label="أضف ${g.name} إلى السلة" title="أضف إلى السلة" onclick="addToCart('${g.id}',this)">+</button>
+          <button class="add-btn gold" aria-label="أضف ${g.name} إلى السلة" title="أضف إلى السلة" onclick="addToCart('${g.id}',this)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+            <span class="lbl">أضف إلى السلة</span>
+          </button>
         </div>
       </div>
-    </article>`).join("");
+    </article>`;}).join("");
   init3D();
 }
 
@@ -924,6 +967,20 @@ function addBoxToCart(){
 
 /* cart */
 function findItem(id){return [...PRODUCTS,...GIFTS].find(p=>p.id===id);}
+function cartQty(id){const e=cart.find(c=>c.id===id);return e?e.qty:0;}
+function syncCardState(id,pop){
+  const el=document.getElementById("qtybadge-"+id);
+  if(!el) return;
+  const q=cartQty(id);
+  if(q>0){
+    el.textContent="×"+q;
+    el.classList.add("show");
+    if(pop){el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");}
+  }else{
+    el.classList.remove("show","pop");
+  }
+}
+function syncAllBadges(){[...PRODUCTS,...GIFTS].forEach(p=>syncCardState(p.id));}
 function animateAddToCart(source){
   if(!source || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const target=document.querySelector('.hactions .icon-btn[aria-label="السلة"]');
@@ -964,7 +1021,7 @@ function addToCart(id,source){
   const p=findItem(id); const e=cart.find(c=>c.id===id);
   if(e) e.qty++; else cart.push({id:p.id,name:p.name,price:p.price,qty:1});
   animateAddToCart(source);
-  save();updateCart();toast("أُضيف إلى السلة: "+p.name);
+  save();updateCart();syncCardState(id,true);toast("أُضيف إلى السلة: "+p.name);
 }
 function step(id,d){
   const e=cart.find(c=>c.id===id); if(!e)return;
@@ -1015,6 +1072,7 @@ function updateCart(){
   $("#ship").textContent=money(shipping());
   $("#tot").textContent=money(total());
   $("#coTotal").textContent=money(total());
+  syncAllBadges();
 }
 function openCart(){$("#cart").classList.add("open");$("#overlay").classList.add("open");}
 function closeCart(){$("#cart").classList.remove("open");$("#overlay").classList.remove("open");}
