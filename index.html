@@ -13,7 +13,7 @@
 <link rel="dns-prefetch" href="https://script.googleusercontent.com" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet" />
 <script>
 /* ===== جلب فوري بلا انتظار: عرض من الذاكرة المحلية + تحديث صامت في الخلفية ===== */
 (function(){
@@ -91,7 +91,7 @@ header.site .wrap{width:auto;padding-inline:clamp(.75rem,1.6vw,1.25rem)}
 .brand{display:flex;align-items:center;gap:clamp(8px,1.5vw,12px);min-width:0}
 .brand>span{min-width:0}
 .brand img{width:clamp(36px,8vw,46px);height:clamp(36px,8vw,46px);flex:0 0 auto;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px oklch(.78 .11 82/.6)}
-.brand .n{font-family:"Cormorant Garamond",serif;font-size:var(--step-1);font-weight:700;color:var(--green);line-height:1}
+.brand .n{font-family:"Amiri","Aref Ruqaa",serif;font-size:var(--step-1);font-weight:700;color:var(--green);line-height:1.4;padding-bottom:.08em;letter-spacing:0}
 nav.main{display:none;gap:26px}
 nav.main a{font-size:.9rem;font-weight:500;position:relative;padding:4px 0}
 nav.main a::after{content:"";position:absolute;inset-inline-start:0;bottom:0;height:1px;width:0;background:var(--gold);transition:width .5s var(--ease)}
@@ -573,11 +573,12 @@ body.introing{overflow:hidden}
   .head-shell{padding-block:calc(7px + env(safe-area-inset-top)) 7px}
   header.site{width:calc(100% - 16px);border-radius:1rem}
   header.site .wrap{width:100%;padding-inline:9px}
-  .hrow{min-height:54px;padding-block:7px;gap:7px}
-  .brand{gap:8px;overflow:hidden}
-  .brand img{width:36px;height:36px}
-  .brand .n{display:block;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .brand .eyebrow{display:block;font-size:.5rem;letter-spacing:.12em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hrow{min-height:60px;padding-block:8px;gap:7px}
+  .brand{gap:8px;overflow:visible;align-items:center}
+  .brand img{width:38px;height:38px}
+  .brand>span{display:flex;align-items:center;justify-content:center;height:38px;min-width:0;padding:0}
+  .brand .n{display:flex;align-items:center;height:38px;font-family:"Amiri","Aref Ruqaa",serif;font-size:1.32rem;font-weight:700;line-height:1;white-space:nowrap;overflow:visible;padding:0;margin:0;letter-spacing:0}
+  .brand .eyebrow{display:none}
   .hactions{gap:5px}
   .icon-btn{width:36px;height:36px;min-width:36px;min-height:36px;font-size:.72rem}
   .badge{inset-block-start:-3px;inset-inline-end:-3px;min-width:17px;height:17px;font-size:.6rem;box-shadow:0 0 0 2px var(--bg)}
@@ -654,8 +655,7 @@ body.introing{overflow:hidden}
   #intro .bar{width:min(270px,76vw)}
 }
 @media (max-width:380px){
-  .brand .eyebrow{display:none}
-  .brand .n{font-size:.98rem}
+  .brand .n{font-size:1.16rem;line-height:1;padding:0;margin:0;font-family:"Amiri","Aref Ruqaa",serif}
   .hero .inner{padding-top:88px}
   .hero .rise.d3{grid-template-columns:1fr}
   .hero .btn{min-height:42px}
@@ -814,6 +814,110 @@ body.introing{overflow:hidden}
   .reels-lead{font-size:.9rem}
 }
 
+
+/* ===== إعادة تصميم قسم اصنع علبتك — Frosted depth / Mobile first ===== */
+#box.box-builder-section{position:relative;isolation:isolate;padding-block:clamp(44px,7vw,84px);overflow:hidden}
+#box.box-builder-section::before{content:none}
+#box.box-builder-section::after{content:none}
+.box-builder-shell{width:min(100%,980px);margin-inline:auto;padding:clamp(18px,4vw,42px)}
+.box-builder-head{max-width:620px;margin-bottom:24px}
+.box-builder-kicker{margin:0 0 7px;color:var(--green);font-size:.72rem;font-weight:800;letter-spacing:.06em}
+.box-builder-head h2{margin:0;color:var(--green-deep);font-size:clamp(1.8rem,4vw,3rem);line-height:1.25}
+.box-builder-head p:last-child{margin:10px 0 0;color:oklch(.35 .035 152/.78);font-size:.93rem;line-height:1.85}
+.box-builder-panel{position:relative;overflow:hidden;border:1px solid oklch(.78 .11 82/.35);border-radius:22px;background:linear-gradient(155deg,var(--green-deep),var(--green) 60%,oklch(.32 .08 150));box-shadow:0 28px 64px -42px oklch(.23 .06 152/.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.box-builder-panel::before{content:"";display:block;height:3px;background:linear-gradient(90deg,transparent,var(--gold-soft),var(--gold))}
+.box-builder-main{padding:clamp(16px,3vw,28px)}
+.box-capacity{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+.box-capacity-label{margin:0;color:oklch(.96 .014 84/.85);font-size:.78rem;font-weight:700}
+.box-capacity-title{margin:3px 0 0;color:#fff;font-size:clamp(1.18rem,3vw,1.55rem);font-weight:800;line-height:1.45}
+.box-remaining{flex:0 0 auto;border:1px solid oklch(1 0 0/.28);border-radius:999px;background:oklch(1 0 0/.14);padding:7px 11px;color:#fff;font-size:.72rem;font-weight:800;white-space:nowrap}
+.box-progress{height:8px;overflow:hidden;border-radius:999px;background:oklch(1 0 0/.18)}
+.box-progress-fill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transition:width .35s var(--ease)}
+#box .boxlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+#box .boxrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;min-height:76px;padding:13px 14px;border:1px solid oklch(1 0 0/.22);border-radius:14px;background:oklch(1 0 0/.1);color:#fff;box-shadow:0 8px 22px -22px oklch(.12 .03 152/.8);transition:border-color .25s,background .25s,transform .25s}
+#box .boxrow.is-selected{border-color:oklch(.78 .11 82/.6);background:oklch(1 0 0/.22)}
+.box-product{min-width:0}
+.box-product-name{display:block;overflow:hidden;color:#fff;font-size:.88rem;font-weight:700;line-height:1.5;text-overflow:ellipsis;white-space:nowrap}
+.box-product-price{display:block;margin-top:3px;color:oklch(.96 .014 84/.78);font-size:.72rem;font-weight:600}
+#box .stepper{display:grid;grid-template-columns:38px 28px 38px;align-items:center;gap:3px;direction:ltr}
+#box .stepper button{display:grid;place-items:center;width:38px;height:38px;border:1px solid oklch(1 0 0/.3);border-radius:10px;background:oklch(1 0 0/.14);color:#fff;font:700 1.15rem/1 "Cairo",sans-serif;cursor:pointer;touch-action:manipulation;transition:background .2s,color .2s,transform .15s}
+#box .stepper button:last-child{border-color:oklch(.78 .11 82/.55);background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:var(--green-deep)}
+#box .stepper button:active{transform:scale(.92)}
+#box .box-qty{min-width:28px;color:#fff;font-size:.9rem;text-align:center;font-variant-numeric:tabular-nums}
+.box-builder-summary{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px 24px;padding:20px clamp(16px,3vw,28px);border-top:1px solid oklch(1 0 0/.22);background:oklch(.18 .05 152/.42);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.box-summary-copy{display:grid;gap:4px}
+.box-summary-label{color:oklch(.96 .014 84/.82);font-size:.76rem;font-weight:700}
+.box-summary-price{color:#fff;font-size:clamp(1.35rem,3vw,1.8rem);font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.box-summary-meta{color:oklch(.96 .014 84/.7);font-size:.7rem}
+.box-add-btn{min-width:230px;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid oklch(.78 .11 82/.6);border-radius:12px;background:linear-gradient(135deg,var(--gold-soft),var(--gold));color:var(--green-deep);font:800 .86rem/1 "Cairo",sans-serif;box-shadow:0 12px 24px -17px oklch(.55 .11 82/.9);cursor:pointer;transition:transform .22s,box-shadow .22s}
+.box-add-btn:hover{transform:translateY(-1px);box-shadow:0 15px 26px -17px oklch(.45 .11 82/.95)}
+.box-add-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
+.box-fresh-note{margin:13px 0 0;color:oklch(.96 .014 84/.7);font-size:.69rem;text-align:center}
+@media(max-width:700px){
+  #box.box-builder-section{padding-block:28px 36px}
+  .box-builder-shell{padding:20px 12px}
+  .box-builder-head{margin-bottom:17px;padding-inline:3px}
+  .box-builder-kicker{font-size:.65rem}
+  .box-builder-head h2{font-size:1.72rem}
+  .box-builder-head p:last-child{font-size:.82rem;line-height:1.75}
+  .box-builder-panel{border-radius:18px}
+  .box-builder-main{padding:15px 12px 13px}
+  .box-capacity{gap:8px;margin-bottom:12px}
+  .box-capacity-label{font-size:.69rem}
+  .box-capacity-title{font-size:1.08rem}
+  .box-remaining{padding:6px 9px;font-size:.65rem}
+  #box .boxlist{grid-template-columns:1fr;gap:8px;margin-top:14px}
+  #box .boxrow{min-height:68px;padding:10px 10px 10px 12px;border-radius:12px}
+  .box-product-name{font-size:.81rem}
+  .box-product-price{font-size:.67rem}
+  #box .stepper{grid-template-columns:40px 25px 40px;gap:2px}
+  #box .stepper button{width:40px;height:40px;border-radius:10px;font-size:1.2rem}
+  .box-builder-summary{position:sticky;bottom:0;z-index:2;grid-template-columns:1fr;gap:12px;padding:15px 12px calc(15px + env(safe-area-inset-bottom))}
+  .box-summary-copy{grid-template-columns:1fr auto;align-items:end;gap:2px 12px}
+  .box-summary-price{grid-column:2;grid-row:1/3;font-size:1.3rem}
+  .box-summary-meta{grid-column:1}
+  .box-add-btn{width:100%;min-width:0;min-height:50px}
+  .box-fresh-note{font-size:.63rem}
+}
+@media(prefers-reduced-motion:reduce){.box-progress-fill,#box .boxrow,#box .stepper button,.box-add-btn{transition:none}}
+
+</style>
+
+<style id="rf-mobile-complete-fix">
+/* تحسين ظهور أقسام المنتجات وسلامة النص العربي على جميع الهواتف */
+html[dir="rtl"] body,html[dir="rtl"] button,html[dir="rtl"] input,html[dir="rtl"] select,html[dir="rtl"] textarea{font-family:"Noto Sans Arabic","Cairo",Tahoma,Arial,sans-serif}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] .card h3,html[dir="rtl"] .card .add-btn,html[dir="rtl"] .chip{font-family:"Noto Sans Arabic","Cairo",Tahoma,Arial,sans-serif;letter-spacing:0}
+html[dir="rtl"] .brand .n{font-family:"Amiri","Aref Ruqaa",serif;letter-spacing:0}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] p,html[dir="rtl"] span,html[dir="rtl"] strong,html[dir="rtl"] small,html[dir="rtl"] button{word-break:normal;overflow-wrap:normal;text-wrap:pretty}
+@media (max-width:760px){
+  #shop>.shead+div{display:grid!important;grid-template-columns:1fr;gap:12px!important;width:100%;min-width:0}
+  #filters{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%!important;margin:0!important;padding:0!important;overflow:visible!important;scroll-snap-type:none!important}
+  #filters .chip{display:flex;align-items:center;justify-content:center;width:100%;min-width:0;min-height:46px;padding:8px 10px;font-size:clamp(.75rem,3.5vw,.88rem);font-weight:600;line-height:1.55;white-space:normal;text-align:center}
+  #filters .chip:first-child:last-child,#filters .chip:last-child:nth-child(odd){grid-column:1/-1}
+  input.search{font-family:"Noto Sans Arabic","Cairo",Tahoma,Arial,sans-serif;line-height:1.5}
+  #products.grid,#gifts-grid.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,2.8vw,12px);align-items:stretch}
+  #products>.card,#gifts-grid>.card{width:100%;min-width:0}
+  .card .body{min-width:0;padding:clamp(9px,3vw,12px)}
+  .card h3{font-size:clamp(.82rem,3.8vw,.96rem);line-height:1.7;min-height:3.4em}
+  .card .en{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .card .price{font-size:clamp(.9rem,4vw,1rem);line-height:1.5}
+  .card .add-btn{min-width:0;min-height:44px;padding-inline:6px;font-size:clamp(.72rem,3.4vw,.84rem);line-height:1.45;white-space:normal;text-align:center}
+  .card .add-btn svg{width:15px;height:15px;flex:0 0 15px}
+  .card .stepper{min-width:0}
+  .card .stepper button{flex:0 0 34px}
+}
+@media (max-width:340px){
+  #filters{grid-template-columns:1fr}
+  #filters .chip{grid-column:1!important}
+  #products.grid,#gifts-grid.grid{grid-template-columns:1fr;gap:12px}
+  .card .ph{aspect-ratio:4/3}
+  .card h3{min-height:0;font-size:.96rem}
+  .card .desc{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
+@media (min-width:761px) and (max-width:1024px){
+  #filters{display:flex;flex-wrap:wrap;overflow:visible}
+  #products.grid,#gifts-grid.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+}
 </style>
 </head>
 <body>
@@ -891,21 +995,40 @@ body.introing{overflow:hidden}
     <div class="grid" id="products"></div>
   </section>
 
-  <section class="block wrap" id="box">
-    <div class="royal">
-      <div>
-        <p class="eyebrow" style="color:var(--gold-soft)">التوقيع</p>
+  <section class="block wrap box-builder-section" id="box">
+    <div class="box-builder-shell">
+      <header class="box-builder-head">
+        <p class="box-builder-kicker">روابي فرح · تُحضّر بعناية</p>
         <h2>اصنع علبتك الخاصة</h2>
-        <p style="opacity:.85;line-height:1.9">اختر ما يصل إلى ١٢ قطعة، ونغلّفها بورق حريري وشريط ذهبي. السعر يتحدث فورًا.</p>
-        <div class="boxlist" id="boxlist"></div>
+        <p>رتّب حتى ١٢ قطعة من مخبوزاتك المفضلة، وسنغلّفها بورق حريري وشريط ذهبي.</p>
+      </header>
+      <div class="box-builder-panel">
+        <div class="box-builder-main">
+          <div class="box-capacity">
+            <div>
+              <p class="box-capacity-label">علبة من ١٢ قطعة</p>
+              <p class="box-capacity-title">اخترت <span id="boxCountHeadline">0</span> من 12</p>
+            </div>
+            <span class="box-remaining" id="boxRemaining">12 متبقية</span>
+          </div>
+          <div class="box-progress" role="progressbar" aria-label="تقدم اختيار قطع العلبة" aria-valuemin="0" aria-valuemax="12" aria-valuenow="0">
+            <div class="box-progress-fill" id="boxProgress"></div>
+          </div>
+          <div class="boxlist" id="boxlist"></div>
+        </div>
+        <div class="box-builder-summary">
+          <div class="box-summary-copy">
+            <span class="box-summary-label">إجمالي العلبة</span>
+            <strong class="box-summary-price" id="boxTotal">0.00 د.أ</strong>
+            <span class="box-summary-meta"><span id="boxCount">0</span> قطعة مختارة · التغليف 3.00 د.أ</span>
+          </div>
+          <button class="box-add-btn" type="button" onclick="addBoxToCart()">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+            <span>أضف العلبة إلى السلة</span>
+          </button>
+        </div>
       </div>
-      <div class="boxsum">
-        <div class="rowsum"><span>القطع المختارة</span><strong><span id="boxCount">0</span> / 12</strong></div>
-        <div class="rowsum" style="margin-top:8px"><span>تغليف فاخر</span><strong>3.00 د.أ</strong></div>
-        <div class="rule" style="margin:14px 0"></div>
-        <div class="rowsum"><span>الإجمالي</span><span class="tot" id="boxTotal">0.00 د.أ</span></div>
-        <button class="btn btn-gold" style="margin-top:18px;width:100%;justify-content:center" onclick="addBoxToCart()">أضف العلبة إلى السلة</button>
-      </div>
+      <p class="box-fresh-note">مخبوزات طازجة · تُغلّف يدويًا بكل عناية</p>
     </div>
   </section>
 
@@ -1548,10 +1671,11 @@ function renderQuotes(){
 function renderBox(){
   const opts=PRODUCTS.filter(p=>p.cat!=="cakes").slice(0,6);
   $("#boxlist").innerHTML = opts.map(p=>`
-    <div class="boxrow"><span>${p.name} · ${money(p.price)}</span>
-      <span class="stepper"><button onclick="boxStep('${p.id}',-1)" aria-label="إنقاص">−</button>
-      <b id="bx-${p.id}">${box[p.id]||0}</b>
-      <button onclick="boxStep('${p.id}',1)" aria-label="زيادة">+</button></span></div>`).join("");
+    <div class="boxrow${(box[p.id]||0)>0?' is-selected':''}">
+      <span class="box-product"><span class="box-product-name">${p.name}</span><span class="box-product-price">${money(p.price)}</span></span>
+      <span class="stepper"><button type="button" onclick="boxStep('${p.id}',-1)" aria-label="إنقاص ${p.name}">−</button>
+      <b class="box-qty" id="bx-${p.id}">${box[p.id]||0}</b>
+      <button type="button" onclick="boxStep('${p.id}',1)" aria-label="زيادة ${p.name}">+</button></span></div>`).join("");
   updateBox();
 }
 function boxCount(){return Object.values(box).reduce((a,b)=>a+b,0);}
@@ -1560,11 +1684,20 @@ function boxStep(id,d){
   if(n<0) return;
   if(d>0 && boxCount()>=12){toast("الحد الأقصى ١٢ قطعة في العلبة");return;}
   box[id]=n; if(!n) delete box[id];
-  const el=document.getElementById("bx-"+id); if(el) el.textContent=n;
+  const el=document.getElementById("bx-"+id); if(el){el.textContent=n;const row=el.closest(".boxrow");if(row) row.classList.toggle("is-selected",n>0);}
   updateBox();
 }
 function boxTotal(){return Object.entries(box).reduce((s,[id,q])=>s+PRODUCTS.find(p=>p.id===id).price*q,0)+(boxCount()?3:0);}
-function updateBox(){$("#boxCount").textContent=boxCount();$("#boxTotal").textContent=money(boxTotal());}
+function updateBox(){
+  const count=boxCount(), remaining=12-count;
+  $("#boxCount").textContent=count;
+  $("#boxTotal").textContent=money(boxTotal());
+  const headline=$("#boxCountHeadline"), left=$("#boxRemaining"), fill=$("#boxProgress"), progress=document.querySelector(".box-progress");
+  if(headline) headline.textContent=count;
+  if(left) left.textContent=remaining+" متبقية";
+  if(fill) fill.style.width=((count/12)*100)+"%";
+  if(progress) progress.setAttribute("aria-valuenow",count);
+}
 function addBoxToCart(){
   if(!boxCount()){toast("اختر قطعة واحدة على الأقل");return;}
   const names=Object.entries(box).map(([id,q])=>`${PRODUCTS.find(p=>p.id===id).name}×${q}`).join("، ");
@@ -2352,6 +2485,12 @@ body.jr-swapping{filter:blur(7px) saturate(.9);transition:filter .38s ease}
     "من السلة": "from the cart",
     "التوقيع": "Signature",
     "اصنع علبتك الخاصة": "Build your own box",
+    "روابي فرح · تُحضّر بعناية": "Rawabi Farah · Prepared with care",
+    "رتّب حتى ١٢ قطعة من مخبوزاتك المفضلة، وسنغلّفها بورق حريري وشريط ذهبي.": "Choose up to 12 of your favorite baked pieces, wrapped in tissue paper and a gold ribbon.",
+    "علبة من ١٢ قطعة": "A box of 12 pieces",
+    "إجمالي العلبة": "Box total",
+    "أضف العلبة إلى السلة": "Add box to cart",
+    "مخبوزات طازجة · تُغلّف يدويًا بكل عناية": "Fresh bakes · Hand-wrapped with care",
     "اختر ما يصل إلى ١٢ قطعة، ونغلّفها بورق حريري وشريط ذهبي. السعر يتحدث فورًا.": "Pick up to 12 pieces and we wrap them in silk paper with a gold ribbon. The price updates instantly.",
     "القطع المختارة": "Selected pieces",
     "تغليف فاخر": "Luxury wrapping",
