@@ -2123,18 +2123,18 @@ function focusSearch(){
 }
 
 
-/* ===== شاشة الانترو: لا تنتهي إلا بعد جلب المنتجات فعليًا ===== */
+/* ===== شاشة الانترو: حركة زمنية مستقلة تمامًا عن جلب البيانات ===== */
 window.__catalogReadyResolve=null;
 window.__catalogReady=new Promise(function(res){ window.__catalogReadyResolve=res; });
 (function(){
   document.body.classList.add("introing");
   var el=document.getElementById("intro"), fill=document.getElementById("introFill"), pct=document.getElementById("introPct");
-  var start=performance.now(), duration=1200, done=false, ready=false, cur=0;
+  var INTRO_DURATION=2600; /* مدة الانترو الثابتة */
+  var start=performance.now(), done=false, cur=0;
   var brand=document.querySelector("header.site .brand img");
   var lg=document.getElementById("introLogo");
   if(brand&&lg) lg.src=brand.src;
 
-  /* منع أي تفاعل/نقر يتخطى الانترو */
   if(el){
     ["click","pointerdown","mousedown","touchstart","touchend","keydown","wheel","contextmenu"].forEach(function(ev){
       el.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); }, true);
@@ -2144,22 +2144,12 @@ window.__catalogReady=new Promise(function(res){ window.__catalogReadyResolve=re
   function set(v){ cur=Math.max(cur,v); if(fill) fill.style.width=cur+"%"; if(pct) pct.textContent=Math.round(cur)+"%"; }
   function tick(now){
     if(done) return;
-    var elapsed=Math.min((now-start)/duration,1);
+    var elapsed=Math.min((now-start)/INTRO_DURATION,1);
     var eased=1-Math.pow(1-elapsed,1.35);
-    /* قبل جاهزية المنتجات نتوقف عند 92% */
-    set(ready ? eased*100 : Math.min(eased*100, 92));
-    if(ready && elapsed>=1){ window.__introDone(); return; }
+    set(eased*100);
+    if(elapsed>=1){ window.__introDone(); return; }
     requestAnimationFrame(tick);
   }
-  /* عند جاهزية المنتجات نكمل حتى 100% */
-  var finish=function(){
-    if(ready) return; ready=true;
-    /* نضمن استمرار الشريط بسلاسة من قيمته الحالية */
-    start=Math.min(start, performance.now()-duration*0.85);
-  };
-  window.__catalogReady.then(finish);
-  /* أمان: لا تعلق الشاشة أكثر من 15 ثانية مهما حدث */
-  setTimeout(finish, 2500);
 
   window.__introDone=function(){
     if(done) return; done=true; set(100);
@@ -2167,6 +2157,8 @@ window.__catalogReady=new Promise(function(res){ window.__catalogReadyResolve=re
       setTimeout(function(){ if(el&&el.remove) el.remove(); },800); },220);
   };
   requestAnimationFrame(tick);
+  /* أمان: إغلاق الانترو بأي حال بعد انتهاء مدته */
+  setTimeout(function(){ window.__introDone(); }, INTRO_DURATION+400);
 })();
 
 function boot(){
@@ -2771,14 +2763,21 @@ body.jr-swapping{filter:blur(7px) saturate(.9);transition:filter .38s ease}
 .card .stepper b{transition:transform .25s cubic-bezier(.2,.8,.25,1)}
 .card .stepper b.bump{animation:qtyBadgePop .35s cubic-bezier(.2,.8,.25,1)}
 
-/* — دخول البطاقات وتبديل الأقسام — */
-#products,#gifts-grid{transition:opacity .32s cubic-bezier(.22,.61,.36,1),filter .32s ease,transform .32s cubic-bezier(.22,.61,.36,1)}
-#products.swapping,#gifts-grid.swapping{opacity:.16;filter:blur(6px) saturate(.92);transform:translateY(6px) scale(.988)}
-#products > .card.pop-in,#gifts-grid > .card.pop-in{animation:cardIn .72s cubic-bezier(.22,1,.36,1) both;will-change:transform,opacity,filter}
-@keyframes cardIn{
-  0%{opacity:0;transform:translate3d(0,28px,0) scale(.966);filter:blur(9px)}
-  60%{filter:blur(0)}
-  100%{opacity:1;transform:none;filter:blur(0)}}
+/* — دخول احترافي للبطاقات وتبديل الأقسام — */
+#products,#gifts-grid{transition:opacity .18s ease;filter:none!important;transform:none!important;contain:layout paint}
+#products.swapping,#gifts-grid.swapping{opacity:1;filter:none!important;transform:none!important;pointer-events:none}
+#products > .card,#gifts-grid > .card{backface-visibility:hidden;transform-origin:50% 72%}
+#products > .card.pop-in,#gifts-grid > .card.pop-in{animation:productCardEnter .62s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--rf-stagger,0ms);will-change:opacity,transform}
+#products > .card.grid-exit,#gifts-grid > .card.grid-exit{animation:productCardExit .2s cubic-bezier(.4,0,.2,1) both;animation-delay:var(--rf-stagger,0ms);pointer-events:none;will-change:opacity,transform}
+#products > .card.jrf-el:not(.pop-in):not(.grid-exit),#gifts-grid > .card.jrf-el:not(.pop-in):not(.grid-exit),#products > .card.jr-ref-item:not(.pop-in):not(.grid-exit),#gifts-grid > .card.jr-ref-item:not(.pop-in):not(.grid-exit){opacity:1!important;transform:none!important;filter:none!important;transition-delay:0ms!important;will-change:auto!important}
+#products > .card.jrf-card::before,#gifts-grid > .card.jrf-card::before{display:none!important;animation:none!important}
+@keyframes productCardEnter{
+  0%{opacity:0;transform:translate3d(0,18px,0) scale(.965);filter:none}
+  58%{opacity:1;transform:translate3d(0,-3px,0) scale(1.006);filter:none}
+  100%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:none}}
+@keyframes productCardExit{
+  0%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:none}
+  100%{opacity:0;transform:translate3d(0,10px,0) scale(.982);filter:none}}
 
 /* — تفاعل أزرار الأقسام (نفس الكود رقم 1) — */
 #filters .chip{position:relative;overflow:hidden;isolation:isolate;
@@ -2803,7 +2802,7 @@ body.jr-swapping{filter:blur(7px) saturate(.9);transition:filter .38s ease}
 
 @media (prefers-reduced-motion:reduce){
   .fly-to-cart{display:none}
-  #products > .card.pop-in,#gifts-grid > .card.pop-in,#filters .chip.tapped,.card .stepper,.card .add-btn.added{animation:none}
+  #products > .card.pop-in,#gifts-grid > .card.pop-in,#products > .card.grid-exit,#gifts-grid > .card.grid-exit,#filters .chip.tapped,.card .stepper,.card .add-btn.added{animation:none}
 }
 </style>
 <script>
@@ -2880,20 +2879,40 @@ body.jr-swapping{filter:blur(7px) saturate(.9);transition:filter .38s ease}
     };
   }
 
-  /* دخول البطاقات بحركة متتابعة */
+  /* حركة اصطفاف المنتجات: خروج قصير ثم دخول متتابع ناعم بدون blur أو قفزات عشوائية */
+  function resetProductMotionState(el){
+    el.classList.remove("jrf-el","jrf-card","jrf-in","jr-ref-item","jr-ref-in","grid-exit","pop-in");
+    el.removeAttribute("data-jrf");
+    el.removeAttribute("data-jr-ref");
+  }
+
   function animateGrid(grid){
     if(!grid || RM()) return;
     Array.prototype.forEach.call(grid.children, function(el,i){
       if(!el.classList || !el.classList.contains("card")) return;
-      el.classList.remove("pop-in"); void el.offsetWidth;
-      el.style.animationDelay = ((i%4)*0.055 + Math.floor(i/4)*0.045).toFixed(3)+"s";
+      resetProductMotionState(el);
+      el.style.setProperty("--rf-stagger", Math.min((i%4)*48 + Math.floor(i/4)*34, 360) + "ms");
       el.classList.add("pop-in");
       el.addEventListener("animationend", function(){
         el.classList.remove("pop-in");
-        el.style.animationDelay = "";
+        el.style.removeProperty("--rf-stagger");
         el.style.willChange = "";
       }, {once:true});
     });
+  }
+
+  function exitGrid(grid){
+    if(!grid || RM()) return 0;
+    var maxDelay = 0;
+    Array.prototype.forEach.call(grid.children, function(el,i){
+      if(!el.classList || !el.classList.contains("card")) return;
+      resetProductMotionState(el);
+      var d = Math.min((i%4)*24 + Math.floor(i/4)*14, 150);
+      maxDelay = Math.max(maxDelay, d);
+      el.style.setProperty("--rf-stagger", d + "ms");
+      el.classList.add("grid-exit");
+    });
+    return Math.min(340, 190 + maxDelay);
   }
   window.jrAnimateGrid = animateGrid;
 
@@ -2934,9 +2953,14 @@ body.jr-swapping{filter:blur(7px) saturate(.9);transition:filter .38s ease}
       var grid = document.getElementById("products");
       if(grid && !RM()){
         grid.classList.add("swapping");
-        setTimeout(function(){ grid.classList.remove("swapping"); },140);
+        var delay = exitGrid(grid);
+        setTimeout(function(){
+          _setCat(k);
+          setTimeout(function(){ grid.classList.remove("swapping"); },620);
+        }, delay);
+      }else{
+        _setCat(k);
       }
-      _setCat(k);
     };
   }
 
@@ -3269,6 +3293,7 @@ html.jrfill-on .jrf-sec.jrf-fill::after{
   function targets(sec){
     var list = Array.prototype.slice.call(sec.querySelectorAll(SEL));
     return list.filter(function(el){
+      if(el.closest("#products,#gifts-grid")) return false;
       if(el.closest(".modal,.sheet,.cart,.reels-viewer,.hero,.rv-track,.head-shell")) return false;
       var p = el.parentElement;
       while(p && p !== sec){ if(list.indexOf(p) > -1) return false; p = p.parentElement; }
@@ -3458,6 +3483,7 @@ html.jrfill-on .jrf-sec.jrf-fill::after{
   function sectionTargets(sec){
     var all=Array.prototype.slice.call(sec.querySelectorAll(SELECTOR));
     return all.filter(function(el){
+      if(el.closest("#products,#gifts-grid")) return false;
       if(el.closest(".modal,.sheet,.cart,.reels-viewer,.hero,.rv-track,.head-shell")) return false;
       var p=el.parentElement;
       while(p && p!==sec){
